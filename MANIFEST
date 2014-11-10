@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/qa_firefox.t
+lib/qa_firefox.pm

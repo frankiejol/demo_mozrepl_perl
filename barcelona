@@ -1,0 +1,135 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite;
+
+# Documentation browser under "/perldoc"
+plugin 'PODRenderer';
+plugin "bootstrap3";
+
+my $LOREM = 'Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui';
+
+get "/" => sub { $_[0]->render("default",lorem => $LOREM ) };
+
+get "/multiplication" => sub {
+    my $c = shift;
+    my $op1 = $c->param('op1');
+    my $op2 = $c->param('op2');
+    my $result = '';
+    eval {$result = $op1 * $op2 if defined $op1 && defined $op2};
+
+    # code error on purpose
+#    $result = 1 if $op2 eq '0';
+
+    $c->render("form_mult", op1 => $op1, op2=> $op2, result => $result);
+};
+
+app->start;
+__DATA__
+
+@@ index.html.ep
+% layout 'default';
+% title 'Barcelona';
+
+@@ form_mult.html.ep
+<!DOCTYPE html>
+<html>
+  <head><title>Barcelona</title></head>
+  <body bgcolor="lightblue">
+    <h2>
+        Write two numbers and I will multiply 
+    </h2>
+    <form id="mult">
+        <input type="text" size="2" name="op1" value="<%= $op1 %>" style="width:40px; height:40px;font-size:30px;text-align:right;">
+        * 
+        <input type="text" class="signin" size="2" name="op2" value="<%= $op2 %>" style="width:40px; height:40px;font-size:30px;text-align:right;">
+        = <span id="result" style="font-size:30px"><%= $result %></span>
+    </form>
+  </body>
+</html>
+
+@@ default.html.ep
+<!DOCTYPE html>
+<html>
+  <head><title>Barcelona WS 2014</title></head>
+    %= asset "bootstrap.css"
+    %= asset "jumbotron.css"
+    %= asset "bootstrap.js"
+    </head>
+  <body>
+<%= content %>
+<!-- Static navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#link1">Link1</a></li>
+              <li><a href="#link2">Link 2</a></li>
+              <li><a href="#">Link</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#multiplication">Multiplication</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </div>
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Hello, world!</h1>
+        <p><%= $lorem %></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <a name="link1"><h2>Heading 1</h2></a>
+        <p><%= $lorem %></p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+          <h2>Heading</h2>
+        <p><%= $lorem %></p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+       </div>
+        <div class="col-md-4">
+          <h2>Heading</h2>
+        <p><%= $lorem %></p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+    </div> <!-- /container -->
+
+      <hr>
+         <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <a name="multiplication"><h2>Multiplication</h2></a>
+            <%= $lorem %>
+          <p><a class="btn btn-default" href="/multiplication" role="button">View details &raquo;</a></p>
+        </div>
+    </div>   
+      <footer>
+        <p>&copy; Company 2014</p>
+      </footer>
+    </body>
+</html>

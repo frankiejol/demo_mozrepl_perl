@@ -1,0 +1,6 @@
+Revision history for Perl extension qa_firefox.
+
+0.01  Sat Sep 13 08:40:09 2014
+	- original version; created by h2xs 1.23 with options
+		-X -n qa_firefox
+
