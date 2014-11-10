@@ -17,7 +17,7 @@ get "/multiplication" => sub {
     eval {$result = $op1 * $op2 if defined $op1 && defined $op2};
 
     # code error on purpose
-#    $result = 1 if $op2 eq '0';
+    $result = 1 if $op2 eq '0';
 
     $c->render("form_mult", op1 => $op1, op2=> $op2, result => $result);
 };
